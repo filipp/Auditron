@@ -115,6 +115,8 @@
 				  end tell", [self recipientName], [self recipientEmail], subject, reportFile];
 	} else {
 		
+		NSLog(@"Unsupported mailer: %@", mailer);
+		
 		NSSavePanel *panel = [NSSavePanel savePanel];
 		[panel setCanCreateDirectories:YES];
 		NSString *fileName = [NSString stringWithFormat:@"%@.spx.gz", hostName];
