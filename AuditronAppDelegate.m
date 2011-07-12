@@ -225,6 +225,11 @@
 	
 }
 
+-(void) awakeFromNib
+{
+	[window center];
+}
+
 -(void) openPanelDidEnd:(NSOpenPanel *) openPanel returnCode:(int)returnCode contextInfo:(void *)x
 {
 	NSString *path;
@@ -394,8 +399,6 @@
 		[self setRecipientName:[prefs valueForKey:@"recipient"]];
 		[self setRecipientEmail:[prefs valueForKey:@"email"]];
 	}
-	
-	[window center];
 	
 }
 

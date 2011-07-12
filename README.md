@@ -11,5 +11,12 @@ in case the mailer is not identified.
 The results can then easily reported on by using the File > Compare Results command. This scans a directory for any compressed
 SPX files and builds a report which can then be exported as a CSV file.
 
+##Configuration##
+After the first run, the user is presented with a dialog to set the name and address of the recipient of the report.
+This information is stored in the *application bundle itself* so an admin can just distribute the app without
+the users having to configure it themselves.
+
+The address and name can also be set by choosing Auditrong > Preferences.
+
 ##Bugs and limitations##
 Currently only a very small subset of the SP report can be reported.
