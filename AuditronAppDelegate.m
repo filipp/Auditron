@@ -71,8 +71,7 @@
 	return recipientEmail;
 }
 
--(void) sheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo {
-	
+-(void) sheetDidEnd:(NSWindow *)aSheet returnCode:(int)returnCode contextInfo:(void *)contextInfo {
 	
 	
 }
@@ -192,7 +191,10 @@
 	NSString *prefPath = [[mb resourcePath] stringByAppendingPathComponent:@"prefs.plist"];
 	
 	[prefs writeToFile:prefPath atomically:YES];
-	[configSheet close];
+	
+	[configSheet orderOut:sender];
+	[NSApp endSheet:configSheet returnCode:1];
+	
 }
 
 - (IBAction)build_report:(id)sender
