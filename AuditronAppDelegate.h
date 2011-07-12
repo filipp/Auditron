@@ -8,9 +8,12 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface AuditronAppDelegate : NSObject <NSApplicationDelegate> {
+@interface AuditronAppDelegate : NSObject <NSApplicationDelegate>
+{
     NSWindow *window;
+	
 	IBOutlet NSWindow *sheet;
+	IBOutlet NSWindow *configSheet;
 	IBOutlet NSWindow *resultsWindow;
 	IBOutlet NSTableView *resultsTable;
 	
@@ -24,12 +27,17 @@
 	IBOutlet id *myButton;
 	IBOutlet id *mainView;
 	
-	IBOutlet id *mySpinner;
+	IBOutlet NSTextField *emailField;
+	IBOutlet NSTextField *recipientField;
+	
 	NSString *tempDir;
 	NSString *reportFile;
 	
 	NSString *mailer;
 	NSString *hostName;
+	NSString *recipientName;
+	NSString *recipientEmail;
+	
 	NSArray *supportedMailers;
 	
 	NSMutableArray *comparisonData;
@@ -41,10 +49,10 @@
 
 -(IBAction)compare_results:(id)sender;
 -(IBAction)build_report:(id)sender;
--(void)sheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 -(NSString *) reportFile;
 -(NSMutableArray *) comparisonData;
 -(void) setReportFile:(NSString *)aFile;
 -(void) setComparisonData:(NSMutableArray *)newData;
+-(void)sheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 
 @end

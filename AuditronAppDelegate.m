@@ -47,10 +47,39 @@
 	
 }
 
+-(void)setRecipientName:(NSString *)newName
+{
+	newName = [newName copy];
+	[recipientName release];
+	recipientName = newName;
+}
+
+-(void)setRecipientEmail:(NSString *)newEmail
+{
+	newEmail = [newEmail copy];
+	[recipientEmail release];
+	recipientEmail = newEmail;
+}
+
+-(NSString *)recipientName
+{
+	return recipientName;
+}
+
+-(NSString *)recipientEmail
+{
+	return recipientEmail;
+}
+
 -(void) sheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo {
 	
 	
 	
+}
+
+-(void) prefsSheetDidEnd:(NSWindow *)aSheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
+{
+
 }
 
 -(void) sendmail
@@ -59,8 +88,6 @@
 	NSAppleEventDescriptor* returnDescriptor = NULL;
 	
 	NSString *subject = [NSString stringWithFormat:@"System Profiler Report for %@", hostName];
-	NSString *recipientName = [NSString stringWithString:@"Filipp Lepalaan"];
-	NSString *recipientEmail = [NSString stringWithString:@"filipp@mcare.fi"];
 	
 	NSString *source;
 	
@@ -76,7 +103,7 @@
 				  make new attachment with properties {file name:\"%@\"}\n\
 				  end tell\n\
 				  activate\n\
-				  end tell", subject, recipientName, recipientEmail, reportFile];
+				  end tell", subject, [self recipientName], [self recipientEmail], reportFile];
 	}
 	else if ([mailer isEqualToString:@"com.microsoft.entourage"])
 	{
@@ -86,7 +113,7 @@
 				  set theMessage to make new outgoing message with properties {recipient:theRecipients, subject:\"%@\", attachment:{file:(POSIX file \"%@\")}}\n\
 				  open theMessage\n\
 				  activate\n\
-				  end tell", recipientName, recipientEmail, subject, reportFile];
+				  end tell", [self recipientName], [self recipientEmail], subject, reportFile];
 	} else {
 		
 		NSSavePanel *panel = [NSSavePanel savePanel];
@@ -138,6 +165,36 @@
 	return comparisonData;
 }
 
+- (IBAction)showPrefs:(id)sender
+{
+	[emailField setStringValue:[self recipientEmail]];
+	[recipientField setStringValue:[self recipientName]];
+	
+	[NSApp beginSheet:configSheet 
+	   modalForWindow:window 
+		modalDelegate:self
+	   didEndSelector:@selector(prefsSheetDidEnd:returnCode:contextInfo:) contextInfo:NULL];
+}
+
+- (IBAction)savePrefs:(id)sender
+{
+	NSString *email = [emailField stringValue];
+	NSString *recipient = [recipientField stringValue];
+	
+	[self setRecipientEmail:email];
+	[self setRecipientName:recipient];
+	
+	NSDictionary *prefs = [NSDictionary 
+						   dictionaryWithObjects:[NSArray 
+												  arrayWithObjects:email, recipient, nil] 
+						   forKeys:[NSArray arrayWithObjects:@"email", @"recipient", nil]];
+	NSBundle *mb = [NSBundle mainBundle];
+	NSString *prefPath = [[mb resourcePath] stringByAppendingPathComponent:@"prefs.plist"];
+	
+	[prefs writeToFile:prefPath atomically:YES];
+	[configSheet close];
+}
+
 - (IBAction)build_report:(id)sender
 {
 	NSString *path = [NSString stringWithFormat:@"%@/%@.spx.gz", NSTemporaryDirectory(), hostName];
@@ -153,7 +210,9 @@
 	NSTask *t = [NSTask launchedTaskWithLaunchPath:@"/bin/bash" arguments:args];
 	[progress startAnimation:sender];
 	
-	[NSApp beginSheet:sheet modalForWindow:window modalDelegate:self 
+	[NSApp beginSheet:sheet 
+	   modalForWindow:window 
+		modalDelegate:self 
 	   didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:) contextInfo:NULL];
 	
 	[t waitUntilExit];
@@ -316,9 +375,29 @@
 					  contextInfo:NULL];	
 }
 
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+- (void)applicationWillFinishLaunching:(NSNotification *)aNotification
+{	
+	NSBundle *mb = [NSBundle mainBundle];
+	NSString *prefPath = [[mb resourcePath] stringByAppendingPathComponent:@"prefs.plist"];
+	
+	NSFileManager *fm = [NSFileManager defaultManager];
+	
+	if (![fm fileExistsAtPath:prefPath]) {
+		[NSApp beginSheet:configSheet 
+		   modalForWindow:window 
+			modalDelegate:self
+		   didEndSelector:@selector(prefsSheetDidEnd:returnCode:contextInfo:) contextInfo:NULL];
+	} else {
+		NSDictionary *prefs = [NSDictionary dictionaryWithContentsOfFile:prefPath];
+		[self setRecipientName:[prefs valueForKey:@"recipient"]];
+		[self setRecipientEmail:[prefs valueForKey:@"email"]];
+	}
 	
 	[window center];
+	
+}
+
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	
 	NSProcessInfo *pi = [NSProcessInfo processInfo];
 	hostName = [pi hostName];
