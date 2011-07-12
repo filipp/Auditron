@@ -9,9 +9,9 @@
 	};
 	256AC3D90F4B6AC300CF3369 /* AuditronAppDelegate.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {904, 5330}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1139, 5265}}";
 			sepNavSelRange = "{1290, 0}";
-			sepNavVisRange = "{242, 1772}";
+			sepNavVisRange = "{1453, 2244}";
 		};
 	};
 	29B97313FDCFA39411CA2CEA /* Project object */ = {
@@ -3092,5 +3092,12 @@
 		rType = 0;
 		vrLen = 1772;
 		vrLoc = 242;
+	};
+	C245CF5013CC55AB0067A1FB /* README.md */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {904, 758}}";
+			sepNavSelRange = "{207, 0}";
+			sepNavVisRange = "{0, 820}";
+		};
 	};
 }
