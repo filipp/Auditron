@@ -1,2 +1,4 @@
 build/*
 Auditron.xcodeproj/filipp.*
+.gitignore
+.DS_Store
