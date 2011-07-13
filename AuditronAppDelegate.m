@@ -177,6 +177,12 @@
 	   didEndSelector:@selector(prefsSheetDidEnd:returnCode:contextInfo:) contextInfo:NULL];
 }
 
+- (IBAction)closeResultsWindow:(id)sender
+{	
+	[resultsWindow close];
+	
+}
+
 - (IBAction)savePrefs:(id)sender
 {
 	NSString *email = [emailField stringValue];

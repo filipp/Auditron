@@ -1,6 +1,6 @@
 ##Welcome##
 Auditron is a tool for collecting information about Macs via email and then reporting the results. It's useful for remote
-troubleshooting or even performing remote audits of offices running Macs.
+troubleshooting or even performing remote audits of offices running unmanaged Macs.
 
 ##How it works##
 The user launches the application
